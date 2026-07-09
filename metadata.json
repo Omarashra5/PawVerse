@@ -1,0 +1,6 @@
+{
+  "name": "Pet Explorer",
+  "description": "An ultra-premium discovery platform for exploring cat and dog breeds, featuring interactive search, masonry galleries, comparison tools, and detailed breed statistics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
