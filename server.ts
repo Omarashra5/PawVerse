@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
 
 const CAT_API_KEY = process.env.CAT_API_KEY || "live_HjoR09ItnAN3ZNDNMbmliLRmBApLqDnBDriFM4jWhejtVSVFpbVABW0dfciRl2xf";
 const DOG_API_KEY = process.env.DOG_API_KEY || ""; 
