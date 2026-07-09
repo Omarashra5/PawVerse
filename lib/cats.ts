@@ -1,6 +1,6 @@
-import { fetchWithTimeout } from "./fetch";
-import { cache, CACHE_TTL } from "./cache";
-import { FALLBACK_CATS, CatBreed } from "./fallbackCats";
+import { fetchWithTimeout } from "./fetch.js";
+import { cache, CACHE_TTL } from "./cache.js";
+import { FALLBACK_CATS, CatBreed } from "./fallbackCats.js";
 
 const CAT_API_KEY = process.env.CAT_API_KEY || "live_HjoR09ItnAN3ZNDNMbmliLRmBApLqDnBDriFM4jWhejtVSVFpbVABW0dfciRl2xf";
 const CAT_API_BASE = "https://api.thecatapi.com/v1";

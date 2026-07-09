@@ -1,6 +1,6 @@
-import { fetchWithTimeout } from "./fetch";
-import { cache, CACHE_TTL } from "./cache";
-import { FALLBACK_DOGS, DogBreed } from "./fallbackDogs";
+import { fetchWithTimeout } from "./fetch.js";
+import { cache, CACHE_TTL } from "./cache.js";
+import { FALLBACK_DOGS, DogBreed } from "./fallbackDogs.js";
 
 const DOG_API_KEY = process.env.DOG_API_KEY || "";
 const DOG_API_BASE = "https://api.thedogapi.com/v1";

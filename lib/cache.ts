@@ -1,5 +1,5 @@
-import { CatBreed } from "./fallbackCats";
-import { DogBreed } from "./fallbackDogs";
+import { CatBreed } from "./fallbackCats.js";
+import { DogBreed } from "./fallbackDogs.js";
 
 export interface CacheSchema {
   catBreeds: CatBreed[] | null;
