@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import { 
-  Heart, Scale, Trash2, ArrowUp, RefreshCw, Filter, Compass, 
-  Search, SlidersHorizontal, Eye, Calendar, Sparkles, BookOpen 
+import {
+  Heart, Scale, Trash2, ArrowUp, RefreshCw, Filter, Compass,
+  Search, SlidersHorizontal, Eye, Calendar, Sparkles, BookOpen
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -23,7 +23,7 @@ export default function App() {
   const [catBreeds, setCatBreeds] = useState<Breed[]>([]);
   const [dogBreeds, setDogBreeds] = useState<Breed[]>([]);
   const [breedOfTheDay, setBreedOfTheDay] = useState<Breed | null>(null);
-  
+
   const [loadingBreeds, setLoadingBreeds] = useState(true);
   const [loadingBreedOfTheDay, setLoadingBreedOfTheDay] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -177,7 +177,7 @@ export default function App() {
         });
       }
     });
-    return Array.from(new Set(list)).sort().slice(0, 40); 
+    return Array.from(new Set(list)).sort().slice(0, 40);
   }, [allBreeds]);
 
   const addToast = (message: string, type: "success" | "info" | "warning" = "info") => {
@@ -263,9 +263,9 @@ export default function App() {
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
       result = result.filter(
-        b => b.name.toLowerCase().includes(q) || 
-             (b.temperament && b.temperament.toLowerCase().includes(q)) ||
-             (b.origin && b.origin.toLowerCase().includes(q))
+        b => b.name.toLowerCase().includes(q) ||
+          (b.temperament && b.temperament.toLowerCase().includes(q)) ||
+          (b.origin && b.origin.toLowerCase().includes(q))
       );
     }
 
@@ -304,16 +304,23 @@ export default function App() {
       });
     }
 
-    if (activeFilters.sortBy === "alphabetical") {
-      result.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (activeFilters.sortBy === "energy") {
-      result.sort((a, b) => (b.energy_level || 0) - (a.energy_level || 0));
-    } else if (activeFilters.sortBy === "intelligence") {
-      result.sort((a, b) => (b.intelligence || 0) - (a.intelligence || 0));
-    } else if (activeFilters.sortBy === "random") {
-      result.sort(() => Math.random() - 0.5);
-    }
+    if (activeFilters.sortBy === "random") {
+      // طريقة احترافية ومضمونة للترتيب العشوائي (Fisher-Yates)
+      for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+    } else {
+      // قاموس للترتيب العادي بدل زحمة الـ if/else
+      const sortStrategies = {
+        alphabetical: (a, b) => a.name.localeCompare(b.name),
+        energy: (a, b) => (b.energy_level || 0) - (a.energy_level || 0),
+        intelligence: (a, b) => (b.intelligence || 0) - (a.intelligence || 0),
+      };
 
+      const sortFn = sortStrategies[activeFilters.sortBy];
+      if (sortFn) result.sort(sortFn);
+    }
     return result;
   }, [allBreeds, searchQuery, activeFilters]);
 
@@ -334,11 +341,11 @@ export default function App() {
   }, [dogBreeds]);
   return (
     <div className="min-h-screen bg-[#fafafa] text-slate-800 dark:bg-zinc-950 dark:text-slate-100 transition-colors duration-300 pb-12 font-sans relative overflow-hidden">
-      
+
       <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-orange-500/10 dark:bg-orange-600/15 rounded-full blur-[120px] pointer-events-none z-0" />
       <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-600/15 rounded-full blur-[120px] pointer-events-none z-0" />
-      
-      <div 
+
+      <div
         className="fixed top-0 left-0 h-[3px] bg-gradient-to-r from-orange-500 via-amber-500 to-amber-600 z-50 transition-all duration-100"
         style={{ width: `${scrollProgress}%` }}
       />
@@ -358,7 +365,7 @@ export default function App() {
 
       <main className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pt-4 relative">
         <AnimatePresence mode="wait">
-          
+
           {currentTab === "explore" && (
             <motion.div
               key="explore"
@@ -398,11 +405,10 @@ export default function App() {
                     </div>
                     <button
                       onClick={() => setShowFilters(!showFilters)}
-                      className={`p-2.5 rounded-2xl border flex items-center justify-center transition-all cursor-pointer ${
-                        showFilters 
-                          ? "bg-orange-500/10 text-orange-500 border-orange-500/25" 
+                      className={`p-2.5 rounded-2xl border flex items-center justify-center transition-all cursor-pointer ${showFilters
+                          ? "bg-orange-500/10 text-orange-500 border-orange-500/25"
                           : "border-slate-200 dark:border-white/10 bg-white dark:bg-zinc-900 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-500"
-                      }`}
+                        }`}
                       title="Toggle Filters"
                     >
                       <SlidersHorizontal className="w-4 h-4" />
@@ -419,7 +425,7 @@ export default function App() {
                       className="overflow-hidden"
                     >
                       <div className="p-5 rounded-2xl border border-slate-200/50 dark:border-white/5 bg-slate-50 dark:bg-white/1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-semibold">
-                        
+
                         <div className="space-y-1.5">
                           <label className="text-slate-400 block text-[10px] uppercase font-mono tracking-wider">Lineage Class</label>
                           <select
@@ -534,7 +540,7 @@ export default function App() {
                     </button>
                   </div>
                 ) : (
-                  <motion.div 
+                  <motion.div
                     layout
                     className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                   >
@@ -599,7 +605,7 @@ export default function App() {
                 <h3 className="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest block border-b border-slate-100 dark:border-white/3 pb-1.5">
                   Saved Breed Lineages ({favoriteBreeds.length})
                 </h3>
-                
+
                 {favoriteBreeds.length === 0 ? (
                   <p className="text-xs font-sans text-slate-400 italic">No breed profiles favorited yet. Explore and save them from the Explore board.</p>
                 ) : (
@@ -629,7 +635,7 @@ export default function App() {
                 <h3 className="text-xs font-bold font-mono text-slate-400 uppercase tracking-widest block border-b border-slate-100 dark:border-white/3 pb-1.5">
                   Saved Gallery Portraits ({favoriteImages.length})
                 </h3>
-                
+
                 {favoriteImages.length === 0 ? (
                   <p className="text-xs font-sans text-slate-400 italic">No custom gallery photos saved yet. Visit the Gallery board to save portraits.</p>
                 ) : (
@@ -651,7 +657,7 @@ export default function App() {
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
                             </div>
-                            
+
                             <div>
                               {breedInfo && (
                                 <div className="text-[10px]">
@@ -736,9 +742,9 @@ export default function App() {
         addToast={addToast}
       />
 
-      <ToastNotification 
-        toasts={toasts} 
-        removeToast={removeToast} 
+      <ToastNotification
+        toasts={toasts}
+        removeToast={removeToast}
       />
 
     </div>
