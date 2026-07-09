@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { getCatBreeds } from "../lib/cats";
-import { getDogBreeds } from "../lib/dogs";
+import { getCatBreeds } from "../lib/cats.js";
+import { getDogBreeds } from "../lib/dogs.js";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {

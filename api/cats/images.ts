@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { fetchWithTimeout } from "../../lib/fetch";
-import { getCatBreeds } from "../../lib/cats";
+import { getCatBreeds } from "../../lib/cats.js";
 
 const CAT_API_KEY = process.env.CAT_API_KEY || "live_HjoR09ItnAN3ZNDNMbmliLRmBApLqDnBDriFM4jWhejtVSVFpbVABW0dfciRl2xf";
 const CAT_API_BASE = "https://api.thecatapi.com/v1";

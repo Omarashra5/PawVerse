@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { fetchWithTimeout } from "../../lib/fetch";
-import { getDogBreeds } from "../../lib/dogs";
+import { getDogBreeds } from "../../lib/dogs.js";
 
 const DOG_API_KEY = process.env.DOG_API_KEY || "";
 const DOG_API_BASE = "https://api.thedogapi.com/v1";
