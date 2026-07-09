@@ -12,17 +12,24 @@ export async function getCatBreeds(): Promise<CatBreed[]> {
   }
 
   try {
-    const headers: HeadersInit = {};
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    };
+    
     if (CAT_API_KEY) {
-      headers["x-api-key"] = CAT_API_KEY;
+      headers["x-api-key"] = CAT_API_KEY.trim(); // تنظيف الفراغات إن وجدت
     }
-    const response = await fetchWithTimeout(`${CAT_API_BASE}/breeds`, headers);
+
+    console.log(`[Cat API] Fetching live data with key length: ${CAT_API_KEY?.length || 0}`);
+    const response = await fetchWithTimeout(`${CAT_API_BASE}/breeds`, headers, 15000);
+    
     if (!response.ok) {
       const text = await response.text().catch(() => "");
-      throw new Error(`Cat API error: ${response.status} ${response.statusText} - ${text}`);
+      throw new Error(`Status: ${response.status} - Response: ${text}`);
     }
-    const data = await response.json();
     
+    const data = await response.json();
     const processed = data.map((b: any) => ({
       ...b,
       image: b.image || (b.reference_image_id ? { url: `https://cdn2.thecatapi.com/images/${b.reference_image_id}.jpg` } : null)
@@ -31,8 +38,8 @@ export async function getCatBreeds(): Promise<CatBreed[]> {
     cache.catBreeds = processed;
     cache.lastUpdated = now;
     return processed;
-  } catch (err) {
-    console.warn("Failed to fetch live Cat Breeds, using fallback", err);
+  } catch (err: any) {
+    console.error("[Cat API Error]: Live fetch failed, serving fallback database.", err.message || err);
     return cache.catBreeds || FALLBACK_CATS;
   }
 }

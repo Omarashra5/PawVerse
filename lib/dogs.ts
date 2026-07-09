@@ -12,17 +12,24 @@ export async function getDogBreeds(): Promise<DogBreed[]> {
   }
 
   try {
-    const headers: HeadersInit = {};
+    const headers: Record<string, string> = {
+      "Content-Type": "application/json",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    };
+
     if (DOG_API_KEY) {
-      headers["x-api-key"] = DOG_API_KEY;
+      headers["x-api-key"] = DOG_API_KEY.trim(); // تنظيف الفراغات إن وجدت
     }
-    const response = await fetchWithTimeout(`${DOG_API_BASE}/breeds`, headers);
+
+    console.log(`[Dog API] Fetching live data with key length: ${DOG_API_KEY?.length || 0}`);
+    const response = await fetchWithTimeout(`${DOG_API_BASE}/breeds`, headers, 15000);
+    
     if (!response.ok) {
       const text = await response.text().catch(() => "");
-      throw new Error(`Dog API error: ${response.status} ${response.statusText} - ${text}`);
+      throw new Error(`Status: ${response.status} - Response: ${text}`);
     }
-    const data = await response.json();
     
+    const data = await response.json();
     const processed = data.map((b: any) => {
       const temp = (b.temperament || "").toLowerCase();
       
@@ -56,8 +63,8 @@ export async function getDogBreeds(): Promise<DogBreed[]> {
     cache.dogBreeds = processed;
     cache.lastUpdated = now;
     return processed;
-  } catch (err) {
-    console.warn("Failed to fetch live Dog Breeds, using fallback", err);
+  } catch (err: any) {
+    console.error("[Dog API Error]: Live fetch failed, serving fallback database.", err.message || err);
     return cache.dogBreeds || FALLBACK_DOGS;
   }
 }
